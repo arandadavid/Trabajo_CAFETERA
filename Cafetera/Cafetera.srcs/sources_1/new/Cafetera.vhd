@@ -17,7 +17,7 @@ architecture behavioral of FSM is
     signal estado_actual: ESTADOS;
     signal estado_siguiente: ESTADOS;
     constant max_count: INTEGER := 50000000; --(100Mhz/2)
-    signal count: INTEGER range 0 to max_count;
+    signal count: INTEGER range 0 to max_count := 0;
     signal CLK_state : STD_LOGIC := '0';
     shared variable segundos: INTEGER := 0;
 begin

@@ -4,8 +4,8 @@ use ieee.numeric_std.ALL;
 
 entity FSM is
     port(
-        SW_SYNC: in STD_LOGIC_VECTOR(0 to 3);
-        BOTON_SYNC: in STD_LOGIC;
+        BOTON_1, BOTON_2: in STD_LOGIC;  --Botones de selección de los modos
+        SW_ON: in STD_LOGIC;             --Interruptor de encendido
         CLK:  in STD_LOGIC;
         RESET_N: in STD_LOGIC;
         ESTADO: out STD_LOGIC_VECTOR(0 to 3)
@@ -21,7 +21,7 @@ architecture behavioral of FSM is
     signal CLK_state : STD_LOGIC := '0';
     shared variable segundos: INTEGER := 0;
 begin
-    state_register: process(RESET_N,CLK) begin
+    state_register: process(RESET_N,CLK) begin --Actualizamos el estado
         if(RESET_N = '0') then
             estado_actual <= S0;
         elsif rising_edge(CLK) then
@@ -29,17 +29,17 @@ begin
         end if;
     end process;
     
-    nextstate_decod: process (SW_SYNC, BOTON_SYNC, estado_actual, CLK_state) begin
+    nextstate_decod: process (BOTON_1, BOTON_2, SW_ON, estado_actual, CLK_state) begin
         estado_siguiente <= estado_actual;
         case estado_actual is
             when S0 => 
-                if(BOTON_SYNC = '1') then
+                if(SW_ON = '1') then --Interruptor de encendido
                     estado_siguiente <= S1;
                 end if;
             when S1 => 
-                if(SW_SYNC(0) = '1') then --Si activamos el SW asignado a CAFE CORTO
+                if(BOTON_1 = '1') then --Si activamos el pulsador asignado a CAFE CORTO
                     estado_siguiente <= S2;
-                elsif(SW_SYNC(1) = '1') then --Si activamos el SW asignado a CAFE LARGO
+                elsif(BOTON_2 = '1') then --Si activamos el pulsador asignado a CAFE LARGO
                     estado_siguiente <= S3;
                 end if;
             when S2 => 
@@ -49,7 +49,7 @@ begin
                         segundos := segundos + 1;
                     end if;
                 end loop;
-                estado_siguiente <= S4;
+                estado_siguiente <= S4; --Han pasado los 10 segundos de preparación del café corto
             when S3 =>
                 segundos := 0;
                 while segundos < 20 loop
@@ -59,9 +59,9 @@ begin
                 end loop;
                 estado_siguiente <= S4;
             when S4 =>
-                if(SW_SYNC(3) = '1') then --Si activamos el SW asignado a LECHE FRÍA
+                if(BOTON_1 = '1') then --Si activamos el SW asignado a LECHE FRÍA
                     estado_siguiente <= S5;
-                elsif(SW_SYNC(4) = '1') then --Si activamos el SW asignado a LECHE CALIENTE
+                elsif(BOTON_2 = '1') then --Si activamos el SW asignado a LECHE CALIENTE
                     estado_siguiente <= S6;
                 end if;
             when S5 => 
@@ -71,7 +71,7 @@ begin
                         segundos := segundos + 1;
                     end if;
                 end loop;
-                estado_siguiente <= S7;
+                estado_siguiente <= S7; 
             when S6 =>
                 segundos := 0;
                 while segundos < 20 loop
@@ -79,7 +79,7 @@ begin
                         segundos := segundos + 1;
                     end if;
                 end loop;
-                estado_siguiente <= S7;
+                estado_siguiente <= S7; 
             when S7 => 
                 segundos := 0;
                 while segundos < 15 loop
@@ -108,7 +108,7 @@ begin
         end case;
     end process;
     
-    temporizador: process(CLK) begin
+    temporizador: process(CLK) begin --Divisor de frecuencia. Pasamos de 100MHz a 1Hz
         if CLK'event and CLK = '1' then
             if (count<max_count) then
                 count <= count + 1;

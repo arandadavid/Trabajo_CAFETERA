@@ -3,10 +3,14 @@ use IEEE.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.ALL;
 
 entity FSM is
+    generic(
+        max: NATURAL := 10
+            );
     port(
         BOTON_1, BOTON_2: in STD_LOGIC;  --Botones de selección de los modos
         SW_ON: in STD_LOGIC;             --Interruptor de encendido
-        CLK:  in STD_LOGIC;
+        CLK_100MHZ:  in STD_LOGIC;
+        CLK_DIV: in STD_LOGIC;
         RESET_N: in STD_LOGIC;
         ESTADO: out STD_LOGIC_VECTOR(0 to 3)
         );
@@ -16,20 +20,19 @@ architecture behavioral of FSM is
     type ESTADOS is (S0, S1, S2, S3, S4, S5, S6, S7);
     signal estado_actual: ESTADOS;
     signal estado_siguiente: ESTADOS;
-    constant max_count: INTEGER := 50000000; --(100Mhz/2)
-    signal count: INTEGER range 0 to max_count := 0;
-    signal CLK_state : STD_LOGIC := '0';
-    shared variable segundos: INTEGER := 0;
+    subtype contador_t is NATURAL range 0 to max;
+    signal segundos_aux: contador_t := 0;  --Señal "contador" con valor inicial 0
+    
 begin
-    state_register: process(RESET_N,CLK) begin --Actualizamos el estado
+    state_register: process(RESET_N,CLK_100MHZ) begin --Actualizamos el estado
         if(RESET_N = '0') then
             estado_actual <= S0;
-        elsif rising_edge(CLK) then
+        elsif rising_edge(CLK_100MHZ) then
             estado_actual <= estado_siguiente;
         end if;
     end process;
     
-    nextstate_decod: process (BOTON_1, BOTON_2, SW_ON, estado_actual, CLK_state) begin
+    nextstate_decod: process (CLK_100MHZ, CLK_DIV) begin
         estado_siguiente <= estado_actual;
         case estado_actual is
             when S0 => 
@@ -43,21 +46,21 @@ begin
                     estado_siguiente <= S3;
                 end if;
             when S2 => 
-                segundos := 0;
-                while segundos < 10 loop
-                    if CLK_state'event and CLK = '1' then
-                        segundos := segundos + 1;
-                    end if;
-                end loop;
-                estado_siguiente <= S4; --Han pasado los 10 segundos de preparación del café corto
+                if CLK_DIV'event and CLK_DIV = '1' then
+                    segundos_aux <= segundos_aux + 1;
+                end if;
+                if segundos_aux = 1 then
+                    segundos_aux <= 0;
+                    estado_siguiente <= S4;
+                end if;
             when S3 =>
-                segundos := 0;
-                while segundos < 20 loop
-                    if CLK_state'event and CLK = '1' then
-                        segundos := segundos + 1;
-                    end if;
-                end loop;
-                estado_siguiente <= S4;
+                if CLK_DIV'event and CLK_DIV = '1' then
+                    segundos_aux <= segundos_aux + 1;
+                end if;
+                if segundos_aux = 2 then
+                    segundos_aux <= 0;
+                    estado_siguiente <= S4;
+                end if;
             when S4 =>
                 if(BOTON_1 = '1') then --Si activamos el SW asignado a LECHE FRÍA
                     estado_siguiente <= S5;
@@ -65,28 +68,29 @@ begin
                     estado_siguiente <= S6;
                 end if;
             when S5 => 
-                segundos := 0;
-                while segundos < 10 loop
-                    if CLK_state'event and CLK = '1' then
-                        segundos := segundos + 1;
-                    end if;
-                end loop;
-                estado_siguiente <= S7; 
+                if CLK_DIV'event and CLK_DIV = '1' then
+                    segundos_aux <= segundos_aux + 1;
+                end if;
+                if segundos_aux = 1 then
+                    segundos_aux <= 0;
+                    estado_siguiente <= S7;
+                end if;
             when S6 =>
-                segundos := 0;
-                while segundos < 20 loop
-                    if CLK_state'event and CLK = '1' then
-                        segundos := segundos + 1;
-                    end if;
-                end loop;
-                estado_siguiente <= S7; 
+                if CLK_DIV'event and CLK_DIV = '1' then
+                    segundos_aux <= segundos_aux + 1;
+                end if;
+                if segundos_aux = 2 then
+                    segundos_aux <= 0;
+                    estado_siguiente <= S7;
+                end if;
             when S7 => 
-                segundos := 0;
-                while segundos < 15 loop
-                    if CLK_state'event and CLK = '1' then
-                        segundos := segundos + 1;
-                    end if;
-                end loop;
+                if CLK_DIV'event and CLK_DIV = '1' then
+                    segundos_aux <= segundos_aux + 1;
+                end if;
+                if segundos_aux = 3 then
+                    segundos_aux <= 0;
+                    estado_siguiente <= S0;
+                end if;
              when others =>
                 if RESET_N = '0' then
                     estado_siguiente <= S0;
@@ -108,14 +112,5 @@ begin
         end case;
     end process;
     
-    temporizador: process(CLK) begin --Divisor de frecuencia. Pasamos de 100MHz a 1Hz
-        if CLK'event and CLK = '1' then
-            if (count<max_count) then
-                count <= count + 1;
-            else 
-                CLK_state <= not CLK_state;
-                count <= 0;
-            end if;
-        end if;
-    end process;
+
 end behavioral; 

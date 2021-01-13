@@ -15,9 +15,9 @@ end maquina_estados;
 
 architecture behavioral of maquina_estados is
 component divisor_frecuencia
-    generic(
-        max: NATURAL := 10
-            );
+    --generic(
+       -- max: NATURAL := 10
+       --     );
     port(
         RESET_N: in STD_LOGIC;
         CLK_IN: in STD_LOGIC;
@@ -26,9 +26,9 @@ component divisor_frecuencia
 end component;
 
 component FSM
-    generic(
-        max: NATURAL := 10
-            );
+    --generic(
+     --   max: NATURAL := 10
+       --     );
     port(
         BOTON_1, BOTON_2: in STD_LOGIC;  --Botones de selección de los modos
         SW_ON: in STD_LOGIC;             --Interruptor de encendido

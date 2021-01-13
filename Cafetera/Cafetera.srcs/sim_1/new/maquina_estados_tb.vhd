@@ -6,21 +6,27 @@ end maquina_estados_tb;
 
 architecture tb of maquina_estados_tb is
 
-component maquina_estados
-    port (RESET_N: in std_logic;
-          CLK: in std_logic;
-          BOTON_1: in STD_LOGIC;
-          BOTON_2: in STD_LOGIC;
-          SW_ON: in STD_LOGIC;
-          ESTADO: out std_logic_vector (0 to 3));
-end component;
+    component maquina_estados
+        port (RESET_N: in std_logic;
+              CLK: in std_logic;
+              BOTON_1: in STD_LOGIC;
+              BOTON_2: in STD_LOGIC;
+              SW_ON: in STD_LOGIC;
+              ESTADO: out std_logic_vector (0 to 3)
+         );
+    end component;
+    
+    --Inputs
+    signal RESET_N: std_logic;
+    signal CLK: std_logic := '0';
+    signal BOTON_1: STD_LOGIC;
+    signal BOTON_2: STD_LOGIC;
+    signal SW_ON: STD_LOGIC;
+    --Outputs
+    signal ESTADO: std_logic_vector (0 to 3);
+    --Periodo de reloj 100MHz
+    constant CLK_PERIOD : time := 10ns;  
 
-signal RESET_N: std_logic;
-signal CLK: std_logic := '0';
-signal BOTON_1: STD_LOGIC;
-signal BOTON_2: STD_LOGIC;
-signal SW_ON: STD_LOGIC;
-signal ESTADO: std_logic_vector (0 to 3);
 
 begin
 
@@ -34,24 +40,41 @@ begin
               ESTADO    => ESTADO
               );
 
-    CLK <= not CLK after 10 ns;
-    estimulo: process begin
-    BOTON_1 <= '0';
-    BOTON_2 <= '0';
-    SW_ON <= '0';
-    RESET_N <= '1';
+    clkgen: process --Generamos la señal de reloj
+    begin
+      CLK <= '0';
+      wait for 0.5 * CLK_PERIOD;
+      CLK <= '1';
+      wait for 0.5 * CLK_PERIOD;
+    end process;
+    
+    
+    estimulo: process 
+    begin
+        BOTON_1 <= '0';
+        BOTON_2 <= '0';
+        SW_ON <= '0';
+        RESET_N <= '1';
         wait for 10 ns;
         
-        SW_ON <= '1';
-            wait for 40 ns;
-        BOTON_1 <= '1';
-            wait for 10 ns;
-        BOTON_1 <= '0';
-            wait for 200 ns;
-        BOTON_2 <= '1';
-            wait for 20 ns;
-        BOTON_2 <= '0';
-    RESET_N <= '0' after 650 ns;
-       wait;     
+            SW_ON <= '1';
+                wait for 40 ns;
+            BOTON_1 <= '1';
+                wait for 10 ns;
+            BOTON_1 <= '0';
+                wait for 400 ns;
+            BOTON_2 <= '1';
+                wait for 10 ns;
+            BOTON_2 <= '0';
+            RESET_N <= '0' after 600 ns;
+            
+            for i in 0 to 12 loop
+                wait until clk ='0';
+            end loop;
+            
+            ASSERT false
+                REPORT "Simulacin finalizada. Test superado."
+                SEVERITY FAILURE;
+               
     end process;
 end tb;

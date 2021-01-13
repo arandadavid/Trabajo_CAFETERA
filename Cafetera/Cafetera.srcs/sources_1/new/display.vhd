@@ -7,8 +7,8 @@ entity display is
            reset_n: in STD_LOGIC;
            clk : in STD_LOGIC;
            estado : in STD_LOGIC_VECTOR (3 downto 0);
-           disp0, disp1, disp2, disp3, disp4, disp5, disp6, disp7 : out STD_LOGIC_VECTOR (6 downto 0);
-           led_error: out STD_LOGIC );    
+           disp0, disp1, disp2, disp3, disp4, disp5, disp6, disp7 : out STD_LOGIC_VECTOR (6 downto 0)
+     );    
 end display;
            
 architecture behavioral of display is

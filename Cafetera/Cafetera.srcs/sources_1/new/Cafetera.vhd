@@ -5,15 +5,17 @@ use ieee.numeric_std.ALL;
 entity FSM is
     generic(
         max: NATURAL := 10
-            );
+    );
+     
     port(
-        BOTON_1, BOTON_2: in STD_LOGIC;  --Botones de selección de los modos
-        SW_ON: in STD_LOGIC;             --Interruptor de encendido
-        CLK_100MHZ:  in STD_LOGIC;
-        CLK_DIV: in STD_LOGIC;
-        RESET_N: in STD_LOGIC;
-        ESTADO: out STD_LOGIC_VECTOR(0 to 3)
+        BOTON_1, BOTON_2: in STD_LOGIC;         --Botones de selección de los modos
+        SW_ON: in STD_LOGIC;                    --Interruptor de encendido
+        CLK_100MHZ:  in STD_LOGIC;              --Senal de reloj de 100MHz
+        CLK_DIV: in STD_LOGIC;                  --Señal de reloj de 1Hz
+        RESET_N: in STD_LOGIC;                  --Reset activo a nivel bajo
+        ESTADO: out STD_LOGIC_VECTOR(0 to 3)    --Indica el estado actual
         );
+  
 end FSM;
 
 architecture behavioral of FSM is
@@ -21,7 +23,7 @@ architecture behavioral of FSM is
     signal estado_actual: ESTADOS;
     signal estado_siguiente: ESTADOS;
     subtype contador_t is NATURAL range 0 to max;
-    signal segundos_aux: contador_t := 0;  --Señal "contador" con valor inicial 0
+    signal segundos_aux: contador_t := 0;  --Señal "segundos_aux" con valor inicial 0
     
 begin
     state_register: process(RESET_N,CLK_100MHZ) begin --Actualizamos el estado
@@ -49,7 +51,7 @@ begin
                 if CLK_DIV'event and CLK_DIV = '1' then
                     segundos_aux <= segundos_aux + 1;
                 end if;
-                if segundos_aux = 1 then
+                if segundos_aux = 2 then
                     segundos_aux <= 0;
                     estado_siguiente <= S4;
                 end if;
@@ -57,7 +59,7 @@ begin
                 if CLK_DIV'event and CLK_DIV = '1' then
                     segundos_aux <= segundos_aux + 1;
                 end if;
-                if segundos_aux = 2 then
+                if segundos_aux = 4 then
                     segundos_aux <= 0;
                     estado_siguiente <= S4;
                 end if;
@@ -97,6 +99,7 @@ begin
                 end if;
         end case;
     end process;
+    
     
     decodificador: process(estado_actual) begin
         case estado_actual is 

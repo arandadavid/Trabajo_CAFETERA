@@ -55,7 +55,7 @@ begin
   begin
     
     reset_n <= '1';
-    estado <= "0000" after 100 ns;
+    estado <= "0000";
     wait for 200 ns;
     
     estado <="0001" after 100 ns;
@@ -70,9 +70,9 @@ begin
     estado <="1111" after 100 ns;
     wait for 200 ns;
    
-   assert false
-      report "[SUCCESS]: simulation finished."
-      severity failure;
-  end process;
+    assert false
+       report "[SUCCESS]: simulation finished."
+       severity failure;
+   end process;
   
   end architecture;

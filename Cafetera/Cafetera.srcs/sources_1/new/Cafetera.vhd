@@ -13,7 +13,7 @@ entity FSM is
         CLK_100MHZ:  in STD_LOGIC;              --Senal de reloj de 100MHz
         CLK_DIV: in STD_LOGIC;                  --Señal de reloj de 1Hz
         RESET_N: in STD_LOGIC;                  --Reset activo a nivel bajo
-        ESTADO: out STD_LOGIC_VECTOR(0 to 3)    --Indica el estado actual
+        ESTADO: out STD_LOGIC_VECTOR(3 downto 0)    --Indica el estado actual
         );
   
 end FSM;

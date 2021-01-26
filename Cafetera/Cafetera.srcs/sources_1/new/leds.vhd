@@ -96,7 +96,7 @@ begin
                     segundos_aux <= 0;
                 end if;
                                 
-            when X"8" => --S8
+            when X"8" => --Others
                 LEDS_VECTOR <= (others => '0');
                 LED_ERROR <= '1';
                 segundos_aux <= 0;

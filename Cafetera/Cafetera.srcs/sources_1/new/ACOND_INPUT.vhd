@@ -27,7 +27,7 @@ entity ACOND_INPUT is
     CLK: in std_logic; --Señal de reloj 100MHz
     RESET_IN: in std_logic; --Señal de RESET
     Boton1, Boton2: in std_logic; --Botones de selección
-    Boton_sel_1, Boton_sel_2, reset: out std_logic --Botones de selección sincronizados
+    Boton_sel_1, Boton_sel_2: out std_logic --Botones de selección sincronizados
   );
 end ACOND_INPUT;
 
@@ -51,7 +51,7 @@ architecture structural of ACOND_INPUT is
     END COMPONENT;
     
     
-    signal sync_out1, sync_out2, sync_out_reset: std_logic; 
+    signal sync_out1, sync_out2: std_logic; 
 
 begin
     
@@ -68,11 +68,11 @@ begin
        SYNC_OUT => sync_out2
     );
     
-    Inst_Sincronizador_Reset: sincronizador PORT MAP (
-       CLK => CLK,
-       ASYNC_IN => RESET_IN,
-       SYNC_OUT => sync_out_reset
-    );
+--    Inst_Sincronizador_Reset: sincronizador PORT MAP (
+--       CLK => CLK,
+--       ASYNC_IN => RESET_IN,
+--       SYNC_OUT => sync_out_reset
+--    );
     
     
     --Instanciamos los detectores de flanco
@@ -88,9 +88,9 @@ begin
        EDGE => boton_sel_2
     );
 
-    Inst_EdgeDetector_Reset: EdgeDetector PORT MAP (
-       CLK => CLK,
-       SYNC_IN => sync_out_reset,
-       EDGE => reset
-    );
+--    Inst_EdgeDetector_Reset: EdgeDetector PORT MAP (
+--       CLK => CLK,
+--       SYNC_IN => sync_out_reset,
+--       EDGE => reset
+--    );
 end structural;

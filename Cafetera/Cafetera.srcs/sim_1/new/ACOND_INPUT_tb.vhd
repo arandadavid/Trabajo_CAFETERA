@@ -33,11 +33,11 @@ architecture Behavioral of ACOND_INPUT_tb is
             CLK: in std_logic; --Señal de reloj 100MHz
             RESET_IN: in std_logic; --Señal de RESET
             Boton1, Boton2: in std_logic; --Botones de selección
-            Boton_sel_1, Boton_sel_2, reset: out std_logic --Botones de selección sincronizados
+            Boton_sel_1, Boton_sel_2: out std_logic --Botones de selección sincronizados
         );
     end component;  
     
-    signal CLK, RESET_IN, Boton1, Boton2, Boton_sel_1, Boton_sel_2, reset:  std_logic; 
+    signal CLK, RESET_IN, Boton1, Boton2, Boton_sel_1, Boton_sel_2:  std_logic; 
     
     constant CLK_PERIOD: time := 10ns; --Periodo de la señal de reloj (100MHz)
            
@@ -50,8 +50,8 @@ begin
         Boton1 => Boton1,
         Boton2 => Boton2,
         Boton_sel_1 => Boton_sel_1,
-        Boton_sel_2 => Boton_sel_2,
-        reset => reset
+        Boton_sel_2 => Boton_sel_2
+  
     );
     
     clkgen: process --Señal de reloj

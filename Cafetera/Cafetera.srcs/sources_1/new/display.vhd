@@ -16,10 +16,18 @@ begin
 
   mostrar_display: process(reset_n, clk)
    begin
-   if reset_n = '1' then
-    if rising_edge(clk) then
-    case estado is
-     when "0000" => --S0
+   if reset_n = '0' then
+     disp0 <= "1111111";
+     disp1 <= "1111111";
+     disp2 <= "1111111";
+     disp3 <= "1111111";
+     disp4 <= "1111111";
+     disp5 <= "1111111";
+     disp6 <= "1111111";
+     disp7 <= "1111111";
+   elsif rising_edge(clk) then
+     case estado is
+      when "0000" => --S0
        -- HOLA
        disp0 <= "1001000"; --H
        disp1 <= "0000001"; --O
@@ -29,7 +37,7 @@ begin
        disp5 <= "1111111";
        disp6 <= "1111111";
        disp7 <= "1111111";
-     when "0001" => --S1
+      when "0001" => --S1
        -- 1-C
        disp0 <= "1001111"; --1
        disp1 <= "1111110"; --
@@ -40,7 +48,7 @@ begin
        disp5 <= "1111110"; --
        disp6 <= "1110001"; --L
        disp7 <= "1111111";   
-     when "0100" => --S4
+      when "0100" => --S4
       -- 1-C
        disp0 <= "1001111"; --1
        disp1 <= "1111110"; --
@@ -62,7 +70,6 @@ begin
        disp7 <= "1111111";   
       end case;
      end if;
-    end if;
    end process;
 end;
 

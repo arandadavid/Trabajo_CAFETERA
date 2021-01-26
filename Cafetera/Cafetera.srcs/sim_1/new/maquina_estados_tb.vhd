@@ -51,30 +51,25 @@ begin
     
     estimulo: process 
     begin
-        BOTON_1 <= '0';
-        BOTON_2 <= '0';
-        SW_ON <= '0';
-        RESET_N <= '1';
+       
+        RESET_N <= '0', '1' after 10ns;
         wait for 10 ns;
         
-            SW_ON <= '1';
-                wait for 40 ns;
-            BOTON_1 <= '1';
-                wait for 10 ns;
-            BOTON_1 <= '0';
-                wait for 400 ns;
-            BOTON_2 <= '1';
-                wait for 10 ns;
-            BOTON_2 <= '0';
-            RESET_N <= '0' after 600 ns;
-            
-            for i in 0 to 12 loop
-                wait until clk ='0';
-            end loop;
-            
-            ASSERT false
-                REPORT "Simulacin finalizada. Test superado."
-                SEVERITY FAILURE;
+        SW_ON <= '1';
+            wait for 40 ns;
+        BOTON_1 <= '1';
+            wait for 10 ns;
+        BOTON_1 <= '0';
+            wait for 400 ns;
+        BOTON_2 <= '1';
+            wait for 10 ns;
+        BOTON_2 <= '0';
+        RESET_N <= '0' after 600 ns;
+       
+        
+        ASSERT false
+            REPORT "Simulacin finalizada. Test superado."
+            SEVERITY FAILURE;
                
     end process;
 end tb;

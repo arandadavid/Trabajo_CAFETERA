@@ -93,14 +93,11 @@ begin
         wait for 100ns;
         
         Boton1 <= '1', '0' after 30ns;
-        for i in 0 to 28 loop
-           wait until CLK ='0';
-        end loop;
         
+        wait for 1500ns;
         Boton2 <= '1', '0' after 20ns;
-        for i in 0 to 22 loop
-           wait until CLK ='0';
-        end loop;
+        
+        wait for 1200ns;
         
         reset_n <= '0';
         wait for 10*CLK_PERIOD;

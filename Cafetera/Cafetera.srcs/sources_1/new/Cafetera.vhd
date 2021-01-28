@@ -4,7 +4,9 @@ use ieee.numeric_std.ALL;
 
 entity FSM is
     generic(
-        max: NATURAL := 10
+        max: NATURAL := 20;
+        Tiempo1: NATURAL:= 10; --Tiempo asignado al modo 1
+        Tiempo2: NATURAL:= 20  --Tiempo asignado al modo 2
     );
      
     port(
@@ -61,7 +63,7 @@ begin
                 if CLK_DIV'event and CLK_DIV = '1' then
                     segundos_aux <= segundos_aux + 1;
                 end if;
-                if segundos_aux = 10 then
+                if segundos_aux = Tiempo1 then
                     segundos_aux <= 0;
                     estado_siguiente <= S4;
                 end if;
@@ -69,7 +71,7 @@ begin
                 if CLK_DIV'event and CLK_DIV = '1' then
                     segundos_aux <= segundos_aux + 1;
                 end if;
-                if segundos_aux = 20 then
+                if segundos_aux = Tiempo2 then
                     segundos_aux <= 0;
                     estado_siguiente  <=  S4;
                 end if;
@@ -83,7 +85,7 @@ begin
                 if CLK_DIV'event and CLK_DIV = '1' then
                     segundos_aux <= segundos_aux + 1;
                 end if;
-                if segundos_aux = 10 then
+                if segundos_aux = Tiempo1 then
                     segundos_aux <= 0;
                     estado_siguiente <= S7;
                 end if;
@@ -91,7 +93,7 @@ begin
                 if CLK_DIV'event and CLK_DIV = '1' then
                     segundos_aux <= segundos_aux + 1;
                 end if;
-                if segundos_aux = 20 then
+                if segundos_aux = Tiempo2 then
                     segundos_aux <= 0;
                     estado_siguiente <= S7;
                 end if;

@@ -56,6 +56,10 @@ architecture Behavioral of visualizador is
     END COMPONENT;
     
     COMPONENT leds --Declaración del módulo leds
+        generic(
+           Tiempo1: NATURAL:= 10; --Tiempo asignado al modo 1
+           Tiempo2: NATURAL:= 20  --Tiempo asignado al modo 2
+        );
         Port ( 
            RESET_N: in STD_LOGIC;                                   --Reset activo a nivel bajo
            CLK : in STD_LOGIC;                                      --Señal de reloj 100MHz

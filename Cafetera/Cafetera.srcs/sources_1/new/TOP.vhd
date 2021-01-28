@@ -48,6 +48,10 @@ architecture Behavioral of TOP is
     end component;
     
     component maquina_estados
+      generic(
+        Tiempo_M1: NATURAL:= 10; --Tiempo asignado al modo 1
+        Tiempo_M2: NATURAL:= 20  --Tiempo asignado al modo 2
+      );
       port ( 
             RESET_N : in STD_LOGIC;
             CLK : in STD_LOGIC;

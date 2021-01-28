@@ -3,6 +3,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.ALL;
 
 entity maquina_estados is
+    generic(
+        Tiempo_M1: NATURAL:= 10; --Tiempo asignado al modo 1
+        Tiempo_M2: NATURAL:= 20  --Tiempo asignado al modo 2
+    );
     port ( 
            RESET_N : in STD_LOGIC;
            CLK : in STD_LOGIC;
@@ -26,6 +30,10 @@ component divisor_frecuencia
 end component;
 
 component FSM
+    generic(
+        Tiempo1: NATURAL:= Tiempo_M1; --Tiempo asignado al modo 1
+        Tiempo2: NATURAL:= Tiempo_M2  --Tiempo asignado al modo 2
+    );
 
     port(
         BOTON_1, BOTON_2: in STD_LOGIC;  --Botones de selección de los modos

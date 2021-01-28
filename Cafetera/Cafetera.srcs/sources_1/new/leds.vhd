@@ -24,7 +24,9 @@ use IEEE.numeric_std.all;
 entity leds is
   generic(
     size : positive := 10;  --Tamaño del array de LEDS  
-    max : NATURAL := 20     --Limite de segundos
+    max : NATURAL := 20;     --Limite de segundos
+    Tiempo1: NATURAL:= 10;
+    Tiempo2: NATURAL:= 20
   );
   Port ( 
     RESET_N: in STD_LOGIC;                                   --Reset activo a nivel bajo
@@ -56,7 +58,7 @@ begin
                     segundos_aux <= segundos_aux + 1;                                                        
                 end if;
                 
-                if segundos_aux = 10 then 
+                if segundos_aux = Tiempo1 then 
                   segundos_aux <= 0;
                 end if;
                 
@@ -68,7 +70,7 @@ begin
                     segundos_aux <= segundos_aux + 1;
                 end if;
                 
-                if segundos_aux = 20 then
+                if segundos_aux = Tiempo2 then
                     segundos_aux <= 0;
                 end if;
                 
@@ -80,7 +82,7 @@ begin
                     segundos_aux <= segundos_aux + 1;                                                        
                 end if;
                 
-                if segundos_aux = 10 then 
+                if segundos_aux = Tiempo1 then 
                   segundos_aux <= 0;
                 end if;
                             
@@ -91,7 +93,7 @@ begin
                     segundos_aux <= segundos_aux + 1;
                 end if;
                 
-                if segundos_aux = 20 then
+                if segundos_aux = Tiempo2 then
                     segundos_aux <= 0;
                 end if;
                 

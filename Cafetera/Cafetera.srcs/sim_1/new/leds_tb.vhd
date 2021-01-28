@@ -88,15 +88,18 @@ begin
     
     tester: process
     begin
-        RESET_N <= '1';
+        RESET_N <= '0', '1' after 10ns;
         ESTADO <= "0000";
         wait for 40ns;
         
         ESTADO <= "0010";
-        wait for 1000ns;
+        wait for 1200ns;
+        
+        ESTADO <= "0100";
+        wait for 1200ns;
         
         ESTADO <= "0011";
-        wait for 1000ns;
+        wait for 3000ns;
         
         ESTADO <= "1000";
         wait for 100ns;

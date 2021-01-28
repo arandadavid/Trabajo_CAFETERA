@@ -41,60 +41,60 @@ architecture Behavioral of leds is
     signal segundos_aux: contador_t := 0;  --Señal "segundos_aux" con valor inicial 0
 begin
 
-    LEDS: process(reset_n, clk, clk_div)
+    LEDS: process(reset_n, estado, clk_div)
     begin
-    
       if RESET_N = '0' then
         segundos_aux <=  0;
         LEDS_VECTOR <= (others => '0');
         LED_ERROR <= '0';     
-      else
+      else 
         case ESTADO is
             when X"2" => --S2
-                if CLK_DIV'event and CLK_DIV = '1' then
-                    segundos_aux <= segundos_aux + 1;
-                    LEDS_VECTOR <= (segundos_aux => '1', others => '0');
+ 
+                if CLK_DIV'event and CLK_DIV = '1' then  
+                    LEDS_VECTOR <= (segundos_aux => '1', others => '0');                
+                    segundos_aux <= segundos_aux + 1;                                                        
                 end if;
                 
-                if segundos_aux = 10 then
-                    segundos_aux <= 0;
+                if segundos_aux = 10 then 
+                  segundos_aux <= 0;
                 end if;
-                       
-            when X"3" => --S3       
+                
+                          
+            when X"3" => --S3  
+                 
                 if CLK_DIV'event and CLK_DIV = '1' then
+                    LEDS_VECTOR <= ((segundos_aux/2) => '1', others => '0');                     
                     segundos_aux <= segundos_aux + 1;
-                end if;
-             
-                if segundos_aux mod 2 = 0 then --Si segundos es par
-                    LEDS_VECTOR <= ((segundos_aux/2) => '1', others => '0'); 
                 end if;
                 
                 if segundos_aux = 20 then
                     segundos_aux <= 0;
                 end if;
                 
-            when X"5" => --S5                
-                if CLK_DIV'event and CLK_DIV = '1' then
-                    segundos_aux <= segundos_aux + 1;
-                    LEDS_VECTOR <= (segundos_aux => '1', others => '0');
+                
+            when X"5" => --S5       
+                     
+                if CLK_DIV'event and CLK_DIV = '1' then  
+                    LEDS_VECTOR <= (segundos_aux => '1', others => '0');                
+                    segundos_aux <= segundos_aux + 1;                                                        
                 end if;
                 
-                if segundos_aux = 10 then
-                    segundos_aux <= 0;
+                if segundos_aux = 10 then 
+                  segundos_aux <= 0;
                 end if;
                             
-            when X"6" => --S6                            
+            when X"6" => --S6             
+                           
                 if CLK_DIV'event and CLK_DIV = '1' then
+                    LEDS_VECTOR <= ((segundos_aux/2) => '1', others => '0');                     
                     segundos_aux <= segundos_aux + 1;
-                end if;
-             
-                if segundos_aux mod 2 = 0 then --Si segundos es par
-                    LEDS_VECTOR <= ((segundos_aux/2) => '1', others => '0'); 
                 end if;
                 
                 if segundos_aux = 20 then
                     segundos_aux <= 0;
                 end if;
+                
                                 
             when X"8" => --Others
                 LEDS_VECTOR <= (others => '0');

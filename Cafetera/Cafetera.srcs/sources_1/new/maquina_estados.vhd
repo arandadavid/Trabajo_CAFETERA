@@ -15,11 +15,14 @@ end maquina_estados;
 
 architecture behavioral of maquina_estados is
 component divisor_frecuencia
+    generic(
+        max: NATURAL := 10
+    );
     port(
         RESET_N: in STD_LOGIC;
         CLK_IN: in STD_LOGIC;
         CLK_OUT: out STD_LOGIC
-        );
+    );
 end component;
 
 component FSM

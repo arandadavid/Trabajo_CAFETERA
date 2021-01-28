@@ -92,10 +92,10 @@ begin
         SW_ON <= '1'; --Encendemos la cafetera. 
         wait for 100ns;
         
-        Boton1 <= '1', '0' after 30ns;
+        Boton2 <= '1', '0' after 30ns;
         
-        wait for 1500ns;
-        Boton2 <= '1', '0' after 20ns;
+        wait for 3600ns;
+        Boton1 <= '1', '0' after 20ns;
         
         wait for 1200ns;
         

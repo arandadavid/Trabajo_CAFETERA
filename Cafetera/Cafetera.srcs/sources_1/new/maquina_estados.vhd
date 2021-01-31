@@ -48,11 +48,13 @@ end component;
 signal a: STD_LOGIC;
 
 begin
-Inst_divisor_frecuencia: divisor_frecuencia port map(
-    RESET_N => RESET_N,
-    CLK_IN => CLK,
-    CLK_OUT => a
-    );
+Inst_divisor_frecuencia: divisor_frecuencia 
+        generic map ( max => 50000000 )
+        port map(
+            RESET_N => RESET_N,
+            CLK_IN => CLK,
+            CLK_OUT => a
+            );
 
 Inst_FSM: FSM port map(
     BOTON_1 => BOTON_1,

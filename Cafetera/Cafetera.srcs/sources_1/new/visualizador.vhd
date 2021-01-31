@@ -29,7 +29,9 @@ entity visualizador is
     ESTADO: in std_logic_vector(0 to 3);                                                            --Salida de la máquina de estados
     RESET_N : in STD_LOGIC;                                                                         --Reset activo a nivel bajo
     CLK : in STD_LOGIC;                                                                             --Señal de reloj 100MHz
-    disp0, disp1, disp2, disp3, disp4, disp5, disp6, disp7 : out STD_LOGIC_VECTOR (6 downto 0);     --Displays
+--    disp0, disp1, disp2, disp3, disp4, disp5, disp6, disp7 : out STD_LOGIC_VECTOR (6 downto 0);     --Displays
+    DISPLAY: out STD_LOGIC_VECTOR(6 downto 0);                                                      --Displays
+    SEG_CONTROL: out STD_LOGIC_VECTOR(7 downto 0);                                                  --ANODO DE CONTROL
     LEDS_VECTOR : out STD_LOGIC_VECTOR(9 downto 0);                                                 --LEDS indicadores del progreso
     LED_ERROR: out std_logic                                                                        --Led activo en caso de error
    );
@@ -38,22 +40,30 @@ end visualizador;
 
 
 architecture Behavioral of visualizador is
-
-    COMPONENT display --Declaración: módulo display
-        Port ( 
-           reset_n: in STD_LOGIC;
-           clk : in STD_LOGIC;
-           estado : in STD_LOGIC_VECTOR (3 downto 0);
-           disp0 : out STD_LOGIC_VECTOR (6 downto 0);
-           disp1 : out STD_LOGIC_VECTOR (6 downto 0);
-           disp2 : out STD_LOGIC_VECTOR (6 downto 0);
-           disp3 : out STD_LOGIC_VECTOR (6 downto 0);
-           disp4 : out STD_LOGIC_VECTOR (6 downto 0); 
-           disp5 : out STD_LOGIC_VECTOR (6 downto 0); 
-           disp6 : out STD_LOGIC_VECTOR (6 downto 0); 
-           disp7 : out STD_LOGIC_VECTOR (6 downto 0)
-        );    
+    COMPONENT TOP_display is
+        port(
+            RESET_N: in STD_LOGIC;
+            CLK: in STD_LOGIC;
+            ESTADO: in STD_LOGIC_VECTOR(3 downto 0);
+            IMAGEN: out STD_LOGIC_VECTOR(6 downto 0);
+            SEGCTRL: out STD_LOGIC_VECTOR(7 downto 0)
+            );
     END COMPONENT;
+--    COMPONENT display --Declaración: módulo display
+--        Port ( 
+--           reset_n: in STD_LOGIC;
+--           clk : in STD_LOGIC;
+--           estado : in STD_LOGIC_VECTOR (3 downto 0);
+--           disp0 : out STD_LOGIC_VECTOR (6 downto 0);
+--           disp1 : out STD_LOGIC_VECTOR (6 downto 0);
+--           disp2 : out STD_LOGIC_VECTOR (6 downto 0);
+--           disp3 : out STD_LOGIC_VECTOR (6 downto 0);
+--           disp4 : out STD_LOGIC_VECTOR (6 downto 0); 
+--           disp5 : out STD_LOGIC_VECTOR (6 downto 0); 
+--           disp6 : out STD_LOGIC_VECTOR (6 downto 0); 
+--           disp7 : out STD_LOGIC_VECTOR (6 downto 0)
+--        );    
+--    END COMPONENT;
     
     COMPONENT leds --Declaración del módulo leds
         generic(
@@ -82,19 +92,27 @@ architecture Behavioral of visualizador is
     
 begin
     --Instanciamos el módulo displays
-    Inst_Display: display PORT MAP(
-        reset_n => RESET_N,
-        clk => CLK,
-        estado => ESTADO,
-        disp0 => DISP0,
-        disp1 => DISP1,
-        disp2 => DISP2,
-        disp3 => DISP3,
-        disp4 => DISP4,
-        disp5 => DISP5,
-        disp6 => DISP6,
-        disp7 => DISP7
-    );
+--    Inst_Display: display PORT MAP(
+--        reset_n => RESET_N,
+--        clk => CLK,
+--        estado => ESTADO,
+--        disp0 => DISP0,
+--        disp1 => DISP1,
+--        disp2 => DISP2,
+--        disp3 => DISP3,
+--        disp4 => DISP4,
+--        disp5 => DISP5,
+--        disp6 => DISP6,
+--        disp7 => DISP7
+--    );
+    
+    Inst_Display: TOP_display port map(
+       RESET_N => RESET_N,
+       CLK => CLK,
+       ESTADO => ESTADO,
+       IMAGEN => DISPLAY,
+       SEGCTRL => SEG_CONTROL
+       );
     
     --Instanciamos el divisor de frecuencia
     Inst_Divisor: divisor_frecuencia PORT MAP(

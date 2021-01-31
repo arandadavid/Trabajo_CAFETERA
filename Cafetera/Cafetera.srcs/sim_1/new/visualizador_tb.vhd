@@ -33,7 +33,9 @@ architecture Behavioral of visualizador_tb is
             ESTADO: in std_logic_vector(0 to 3);                                                            --Salida de la máquina de estados
             RESET_N : in STD_LOGIC;                                                                         --Reset activo a nivel bajo
             CLK : in STD_LOGIC;                                                                             --Señal de reloj 100MHz
-            disp0, disp1, disp2, disp3, disp4, disp5, disp6, disp7 : out STD_LOGIC_VECTOR (6 downto 0);     --Displays
+--            disp0, disp1, disp2, disp3, disp4, disp5, disp6, disp7 : out STD_LOGIC_VECTOR (6 downto 0);     --Displays
+            DISPLAY: out STD_LOGIC_VECTOR(6 downto 0);                                                      --Displays
+            SEG_CONTROL: out STD_LOGIC_VECTOR(7 downto 0);                                                  --Anodo de control
             LEDS_VECTOR : out STD_LOGIC_VECTOR(9 downto 0);                                                 --LEDS indicadores del progreso
             LED_ERROR: out std_logic
         );
@@ -44,7 +46,9 @@ architecture Behavioral of visualizador_tb is
     signal CLK: std_logic; 
     signal ESTADO: std_logic_vector (3 downto 0);
     --Outputs
-    signal disp0, disp1, disp2, disp3, disp4, disp5, disp6, disp7 :  STD_LOGIC_VECTOR (6 downto 0);
+--    signal disp0, disp1, disp2, disp3, disp4, disp5, disp6, disp7 :  STD_LOGIC_VECTOR (6 downto 0);
+    signal DISPLAY: STD_LOGIC_VECTOR(6 downto 0);
+    signal SEG_CONTROL: STD_LOGIC_VECTOR(7 downto 0);
     signal LEDS_VECTOR :  std_logic_vector (9 downto 0);
     signal LED_ERROR:  std_logic;
     
@@ -60,14 +64,8 @@ begin
         ESTADO => ESTADO,
         LEDS_VECTOR => LEDS_VECTOR,
         LED_ERROR => LED_ERROR,
-        disp0 => DISP0,
-        disp1 => DISP1,
-        disp2 => DISP2,
-        disp3 => DISP3,
-        disp4 => DISP4,
-        disp5 => DISP5,
-        disp6 => DISP6,
-        disp7 => DISP7
+        DISPLAY => DISPLAY,
+        SEG_CONTROL => SEG_CONTROL
     );
     
     clkgen: process --Generamos la señal de reloj 100MHz
